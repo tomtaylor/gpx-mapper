@@ -73,7 +73,22 @@
         }
       });
 
-      // Add line layer
+      // Add invisible hit area layer (wider for easier tapping)
+      map.addLayer({
+        id: 'route-hit-' + route.id,
+        type: 'line',
+        source: 'route-' + route.id,
+        layout: {
+          'line-join': 'round',
+          'line-cap': 'round'
+        },
+        paint: {
+          'line-color': 'transparent',
+          'line-width': 20
+        }
+      });
+
+      // Add visible line layer
       map.addLayer({
         id: 'route-layer-' + route.id,
         type: 'line',
@@ -89,16 +104,16 @@
         }
       });
 
-      // Make route clickable
-      map.on('click', 'route-layer-' + route.id, (e) => {
+      // Make route clickable via hit area
+      map.on('click', 'route-hit-' + route.id, (e) => {
         selectRoute(route.id);
       });
 
-      map.on('mouseenter', 'route-layer-' + route.id, () => {
+      map.on('mouseenter', 'route-hit-' + route.id, () => {
         map.getCanvas().style.cursor = 'pointer';
       });
 
-      map.on('mouseleave', 'route-layer-' + route.id, () => {
+      map.on('mouseleave', 'route-hit-' + route.id, () => {
         map.getCanvas().style.cursor = '';
       });
     }
