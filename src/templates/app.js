@@ -117,7 +117,7 @@
           <span class="route-name">All Routes</span>
         </div>
         <div class="route-meta">
-          <span class="route-distance">${routes.length} routes</span>
+          <span class="route-distance">${routes.length} ${routes.length === 1 ? 'route' : 'routes'}</span>
         </div>
       </div>
     `;
@@ -150,7 +150,8 @@
     });
     
     // Populate mobile select
-    let optionsHtml = '<option value="all">All Routes (' + routes.length + ')</option>';
+    const routeWord = routes.length === 1 ? 'Route' : 'Routes';
+    let optionsHtml = `<option value="all">All ${routeWord} (${routes.length})</option>`;
     optionsHtml += routes.map(route => {
       const elevationText = route.elevationGain != null ? ` ↗${route.elevationGain}m` : '';
       return `<option value="${route.id}">${escapeHtml(route.name)} - ${route.distance} km${elevationText}</option>`;
