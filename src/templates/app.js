@@ -6,6 +6,8 @@
   let routes;
   let map;
   let currentRouteId = null;
+  let startMarker = null;
+  let endMarker = null;
 
   // Load routes from JSON file
   async function loadRoutes() {
@@ -177,6 +179,57 @@
     });
   }
 
+  // Create a marker element
+  function createMarkerElement(type) {
+    const el = document.createElement('div');
+    el.className = 'route-marker route-marker-' + type;
+    el.innerHTML = type === 'start' ? '▶' : '◼';
+    el.style.cssText = `
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: ${type === 'start' ? '#22c55e' : '#ef4444'};
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+      border: 2px solid white;
+    `;
+    return el;
+  }
+
+  // Update start/end markers
+  function updateRouteMarkers(routeId) {
+    // Remove existing markers
+    if (startMarker) {
+      startMarker.remove();
+      startMarker = null;
+    }
+    if (endMarker) {
+      endMarker.remove();
+      endMarker = null;
+    }
+    
+    // Don't show markers for "all" view
+    if (routeId === 'all') return;
+    
+    const route = routes.find(r => r.id === routeId);
+    if (!route || route.coordinates.length < 2) return;
+    
+    const startCoord = route.coordinates[0];
+    const endCoord = route.coordinates[route.coordinates.length - 1];
+    
+    startMarker = new maplibregl.Marker({ element: createMarkerElement('start') })
+      .setLngLat(startCoord)
+      .addTo(map);
+    
+    endMarker = new maplibregl.Marker({ element: createMarkerElement('end') })
+      .setLngLat(endCoord)
+      .addTo(map);
+  }
+
   // Select a route and update the view
   function selectRoute(routeId) {
     currentRouteId = routeId;
@@ -194,6 +247,9 @@
     
     // Update mobile route details
     updateMobileRouteDetails(routeId);
+    
+    // Update start/end markers
+    updateRouteMarkers(routeId);
     
     // Update layer visibility and fit bounds
     if (routeId === 'all') {
