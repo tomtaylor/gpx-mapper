@@ -139,7 +139,7 @@
     
     // Add individual routes
     const routesHtml = routes.map(route => {
-      const elevationText = route.elevationGain != null ? ` ↗ ${route.elevationGain} m` : '';
+      const elevationText = route.elevationGain != null ? ` · ↗ ${route.elevationGain} m` : '';
       return `
       <div class="route-item" data-route-id="${route.id}">
         <div class="route-item-header">
@@ -147,7 +147,7 @@
           <span class="route-name">${escapeHtml(route.name)}</span>
         </div>
         <div class="route-meta">
-          <span class="route-distance">📍 ${route.distance} km${elevationText}</span>
+          <span class="route-stats">📍 ${route.distance} km${elevationText}</span>
           <a href="gpx/${encodeURIComponent(route.filename)}" class="download-link" download>⬇ GPX</a>
         </div>
       </div>
