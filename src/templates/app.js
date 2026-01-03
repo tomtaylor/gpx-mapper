@@ -85,7 +85,7 @@
         paint: {
           'line-color': route.color,
           'line-width': 4,
-          'line-opacity': 0.9
+          'line-opacity': 0.8
         }
       });
 
@@ -152,10 +152,9 @@
     // Populate mobile select
     const routeWord = routes.length === 1 ? 'Route' : 'Routes';
     let optionsHtml = `<option value="all">All ${routeWord} (${routes.length})</option>`;
-    optionsHtml += routes.map(route => {
-      const elevationText = route.elevationGain != null ? ` ↗${route.elevationGain}m` : '';
-      return `<option value="${route.id}">${escapeHtml(route.name)} - ${route.distance} km${elevationText}</option>`;
-    }).join('');
+    optionsHtml += routes.map(route => 
+      `<option value="${route.id}">${escapeHtml(route.name)}</option>`
+    ).join('');
     routeSelect.innerHTML = optionsHtml;
     
     routeSelect.addEventListener('change', (e) => {
@@ -178,12 +177,15 @@
     // Update mobile select
     document.getElementById('routeSelect').value = routeId;
     
+    // Update mobile route details
+    updateMobileRouteDetails(routeId);
+    
     // Update layer visibility and fit bounds
     if (routeId === 'all') {
-      // Show all routes
+      // Show all routes with transparency for overlapping visibility
       for (const route of routes) {
         map.setLayoutProperty('route-layer-' + route.id, 'visibility', 'visible');
-        map.setPaintProperty('route-layer-' + route.id, 'line-opacity', 0.9);
+        map.setPaintProperty('route-layer-' + route.id, 'line-opacity', 0.8);
         map.setPaintProperty('route-layer-' + route.id, 'line-width', 4);
       }
       map.fitBounds(getAllBounds(), { padding: 50 });
@@ -200,6 +202,30 @@
         map.fitBounds(selectedRoute.bounds, { padding: 50 });
       }
     }
+  }
+
+  // Update mobile route details panel
+  function updateMobileRouteDetails(routeId) {
+    const detailsEl = document.getElementById('mobileRouteDetails');
+    
+    if (routeId === 'all') {
+      detailsEl.classList.remove('visible');
+      detailsEl.innerHTML = '';
+      return;
+    }
+    
+    const route = routes.find(r => r.id === routeId);
+    if (!route) {
+      detailsEl.classList.remove('visible');
+      return;
+    }
+    
+    const elevationText = route.elevationGain != null ? ` · ↗ ${route.elevationGain} m` : '';
+    detailsEl.innerHTML = `
+      <span class="route-stats">📍 ${route.distance} km${elevationText}</span>
+      <a href="gpx/${encodeURIComponent(route.filename)}" class="download-btn" download>⬇ Download GPX</a>
+    `;
+    detailsEl.classList.add('visible');
   }
 
   // Handle initial route from URL hash

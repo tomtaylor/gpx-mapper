@@ -186,6 +186,42 @@
       border-color: var(--accent);
     }
     
+    .mobile-route-details {
+      display: none;
+      margin-top: 0.75rem;
+      padding: 0.75rem;
+      background: var(--bg-card);
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+    }
+    
+    .mobile-route-details.visible {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+    
+    .mobile-route-details .route-stats {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+    }
+    
+    .mobile-route-details .download-btn {
+      padding: 0.5rem 1rem;
+      background: var(--accent);
+      color: white;
+      text-decoration: none;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      white-space: nowrap;
+    }
+    
+    .mobile-route-details .download-btn:active {
+      background: var(--accent-hover);
+    }
+    
     /* Mobile styles */
     @media (max-width: 768px) {
       .sidebar {
@@ -201,7 +237,8 @@
       }
       
       .map-container {
-        height: calc(100vh - 110px);
+        flex: 1;
+        min-height: 0;
       }
     }
     
@@ -242,6 +279,9 @@
       <select id="routeSelect">
         <!-- Options populated by JavaScript -->
       </select>
+      <div class="mobile-route-details" id="mobileRouteDetails">
+        <!-- Populated by JavaScript when a route is selected -->
+      </div>
     </div>
     
     <!-- Map -->
