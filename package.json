@@ -1,0 +1,29 @@
+{
+  "name": "gpx-mapper",
+  "version": "1.0.0",
+  "description": "Convert a directory of GPX files into a static website with an interactive map",
+  "main": "src/index.js",
+  "bin": {
+    "gpx-mapper": "./src/index.js"
+  },
+  "type": "module",
+  "scripts": {
+    "build": "node src/index.js ./gpx ./dist --title \"Route Map\""
+  },
+  "keywords": [
+    "gpx",
+    "map",
+    "cycling",
+    "routes",
+    "maplibre",
+    "pmtiles"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "commander": "^12.1.0",
+    "gpxparser": "^3.0.8",
+    "he": "^1.2.0"
+  }
+}
+
