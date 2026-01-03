@@ -4,7 +4,7 @@
   "description": "Convert a directory of GPX files into a static website with an interactive map",
   "main": "src/index.js",
   "bin": {
-    "gpx-mapper": "./src/index.js"
+    "gpx-mapper": "src/index.js"
   },
   "type": "module",
   "scripts": {
@@ -26,4 +26,3 @@
     "he": "^1.2.0"
   }
 }
-
